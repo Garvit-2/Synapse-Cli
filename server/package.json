@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "src/index.js",
+  "bin": {
+    "synapse": "./src/cli/main.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon src/index.js",
@@ -13,11 +16,19 @@
   "license": "ISC",
   "type": "module",
   "dependencies": {
+    "@clack/prompts": "^1.2.0",
     "@prisma/client": "^6.19.0",
     "better-auth": "^1.5.6",
+    "boxen": "^8.0.1",
+    "chalk": "^5.6.2",
+    "commmander": "^0.0.1-security",
     "cors": "^2.8.6",
     "dotenv": "^17.4.0",
     "express": "^5.2.1",
-    "prisma": "^6.19.0"
+    "figlet": "^1.11.0",
+    "open": "^11.0.0",
+    "prisma": "^6.19.0",
+    "yocto-spinner": "^1.1.0",
+    "zod": "^4.3.6"
   }
 }
