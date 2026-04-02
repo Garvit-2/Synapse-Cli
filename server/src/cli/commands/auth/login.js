@@ -119,15 +119,15 @@ export async function loginAction(opts) {
   const serverUrl = options.serverUrl || DEMO_URL;
   const clientId = options.clientId || CLIENT_ID;
 
-  intro(chalk.bold("🔐 Auth CLI Login"));
+  intro(chalk.bold("🔐 Better Auth CLI Login"));
 
-  // if (!clientId) {
-  //   logger.error("CLIENT_ID is not set in .env file");
-  //   console.log(
-  //     chalk.red("\n❌ Please set GITHUB_CLIENT_ID in your .env file")
-  //   );
-  //   process.exit(1);
-  // }
+  if (!clientId) {
+    logger.error("CLIENT_ID is not set in .env file");
+    console.log(
+      chalk.red("\n❌ Please set GITHUB_CLIENT_ID in your .env file")
+    );
+    process.exit(1);
+  }
 
   // Check if already logged in
   const existingToken = await getStoredToken();
@@ -170,14 +170,14 @@ export async function loginAction(opts) {
         }`
       );
 
-      // if (error?.status === 404) {
-      //   console.log(chalk.red("\n❌ Device authorization endpoint not found."));
-      //   console.log(chalk.yellow("   Make sure your auth server is running."));
-      // } else if (error?.status === 400) {
-      //   console.log(
-      //     chalk.red("\n❌ Bad request - check your CLIENT_ID configuration.")
-      //   );
-      // }
+      if (error?.status === 404) {
+        console.log(chalk.red("\n❌ Device authorization endpoint not found."));
+        console.log(chalk.yellow("   Make sure your auth server is running."));
+      } else if (error?.status === 400) {
+        console.log(
+          chalk.red("\n❌ Bad request - check your CLIENT_ID configuration.")
+        );
+      }
 
       process.exit(1);
     }
@@ -223,48 +223,48 @@ export async function loginAction(opts) {
       )
     );
 
-    // const token = await pollForToken(
-    //   authClient,
-    //   device_code,
-    //   clientId,
-    //   interval
-    // );
+    const token = await pollForToken(
+      authClient,
+      device_code,
+      clientId,
+      interval
+    );
 
-    // if (token) {
-    //   // Store the token
-    //   const saved = await storeToken(token);
+    if (token) {
+      // Store the token
+      const saved = await storeToken(token);
 
-    //   if (!saved) {
-    //     console.log(
-    //       chalk.yellow("\n⚠️  Warning: Could not save authentication token.")
-    //     );
-    //     console.log(
-    //       chalk.yellow("   You may need to login again on next use.")
-    //     );
-    //   }
+      if (!saved) {
+        console.log(
+          chalk.yellow("\n⚠️  Warning: Could not save authentication token.")
+        );
+        console.log(
+          chalk.yellow("   You may need to login again on next use.")
+        );
+      }
 
-    //   // Get user info
-    //   const { data: session } = await authClient.getSession({
-    //     fetchOptions: {
-    //       headers: {
-    //         Authorization: `Bearer ${token.access_token}`,
-    //       },
-    //     },
-    //   });
+      // Get user info
+      const { data: session } = await authClient.getSession({
+        fetchOptions: {
+          headers: {
+            Authorization: `Bearer ${token.access_token}`,
+          },
+        },
+      });
 
-    //   outro(
-    //     chalk.green(
-    //       `✅ Login successful! Welcome ${
-    //         session?.user?.name || session?.user?.email || "User"
-    //       }`
-    //     )
-    //   );
+      outro(
+        chalk.green(
+          `✅ Login successful! Welcome ${
+            session?.user?.name || session?.user?.email || "User"
+          }`
+        )
+      );
 
-    //   console.log(chalk.gray(`\n📁 Token saved to: ${TOKEN_FILE}`));
-    //   console.log(
-    //     chalk.gray("   You can now use AI commands without logging in again.\n")
-    //   );
-    // }
+      console.log(chalk.gray(`\n📁 Token saved to: ${TOKEN_FILE}`));
+      console.log(
+        chalk.gray("   You can now use AI commands without logging in again.\n")
+      );
+    }
   } catch (err) {
     spinner.stop();
     console.error(chalk.red("\nLogin failed:"), err.message);
@@ -425,5 +425,5 @@ export const logout = new Command("logout")
 
 export const whoami = new Command("whoami")
   .description("Show current authenticated user")
-  .option("--server-url <url>", "The Better Auth server URL", DEMO_URL)
+  .option("--server-url <url>", "The Better Auth server URL", URL)
   .action(whoamiAction);
