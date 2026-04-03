@@ -8,7 +8,7 @@ import figlet from "figlet";
 import { Command } from "commander";
 
 import { login ,logout, whoami} from "./commands/auth/login.js";
-// import { wakeUp } from "./commands/ai/wakeUp.js";
+import { wakeUp } from "./commands/ai/wakeup.js";
 
 dotenv.config();
 
@@ -30,8 +30,8 @@ async function main() {
     .version("0.0.1")
     .description("Synapse CLI - Device Flow Authentication");
 
-//   // Add commands
-//   program.addCommand(wakeUp);
+  // Add commands
+  program.addCommand(wakeUp);
   program.addCommand(login);
   program.addCommand(logout);
   program.addCommand(whoami);
